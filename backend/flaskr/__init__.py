@@ -16,30 +16,44 @@ def create_app(test_config=None):
     """
     @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     """
     @TODO: Use the after_request decorator to set Access-Control-Allow
     """
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
+        return response
 
-    """
-    @TODO:
-    Create an endpoint to handle GET requests
-    for all available categories.
-    """
+    @app.route('/categories')
+    def categories():
+        """
+        @TODO:
+        Create an endpoint to handle GET requests
+        for all available categories.
+        """
+        return jsonify({
+            'success': True,
+            'data': Category.query.all(),
+        })
 
+    @app.route('/questions')
+    def questions():
+        """
+        @TODO:
+        Create an endpoint to handle GET requests for questions,
+        including pagination (every 10 questions).
+        This endpoint should return a list of questions,
+        number of total questions, current category, categories.
 
-    """
-    @TODO:
-    Create an endpoint to handle GET requests for questions,
-    including pagination (every 10 questions).
-    This endpoint should return a list of questions,
-    number of total questions, current category, categories.
-
-    TEST: At this point, when you start the application
-    you should see questions and categories generated,
-    ten questions per page and pagination at the bottom of the screen for three pages.
-    Clicking on the page numbers should update the questions.
-    """
+        TEST: At this point, when you start the application
+        you should see questions and categories generated,
+        ten questions per page and pagination at the bottom of the screen for three pages.
+        Clicking on the page numbers should update the questions.
+        """
+        return {1:'Questions'}
+    
 
     """
     @TODO:
