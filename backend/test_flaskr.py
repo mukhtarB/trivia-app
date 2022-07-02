@@ -61,13 +61,16 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
 
         self.assertTrue(data['questions'])
-        self.assertTrue(data['total_questions'])
+        self.assertTrue(data['totalQuestions'])
         self.assertTrue(data['categories'])
-        self.assertFalse(data['current_category'])
+        self.assertIsNone(data['currentCategory'])
 
         self.assertEqual(len(data['questions']), 10)
         self.assertEqual(len(data['categories']), 6)
-        self.assertEqual(data['total_questions'], 19)
+        self.assertEqual(data['totalQuestions'], 19)
+
+        self.assertIsInstance(data['questions'], list)
+        self.assertIsInstance(data['categories'], dict)
         self.assertEqual(data['questions'][0]['id'], 5)
     
 
@@ -79,6 +82,24 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'resource not found')
+    
+    def test_get_question_based_on_category_id(self):
+        """Fetch all Questions based on Category"""
+        res = self.client().get('/categories/1/questions')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+        self.assertTrue(data['currentCategory'])
+        self.assertEqual(data['currentCategory'], 'Science')
+
+        self.assertEqual(data['totalQuestions'], 3)
+        self.assertIsInstance(data['questions'], list)
+
+    def test_delete_single_question(self):
+        pass
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
