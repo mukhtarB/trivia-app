@@ -52,7 +52,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertEqual(len(data['categories']), 6)
 
-    def test_questions(self):
+    def test_paginated_questions(self):
         """GETS all questions and return them with pagination."""
         res = self.client().get('/questions')
         data = json.loads(res.data)
@@ -69,7 +69,16 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(len(data['categories']), 6)
         self.assertEqual(data['total_questions'], 19)
         self.assertEqual(data['questions'][0]['id'], 5)
+    
 
+    def test_404_if_page_does_not_exist(self):
+        """Return Error Code 404 if page does not exist"""
+        res = self.client().get('/questions?page=1000')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'resource not found')
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
