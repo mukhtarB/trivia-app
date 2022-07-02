@@ -151,6 +151,17 @@ def create_app(test_config=None):
             422
         )
 
+    @app.errorhandler(425)
+    def not_found(error):
+        return (
+            jsonify({
+                'success': False,
+                'error': 425,
+                'message': 'method not allowed',
+            }),
+            425
+        )
+
     @app.errorhandler(500)
     def not_found(error):
         return (
