@@ -49,12 +49,14 @@ class TriviaTestCase(unittest.TestCase):
         data = json.loads(res.data)
 
         res_data = {
-                "1": "Science",
-                "2": "Art",
-                "3": "Geography",
-                "4": "History",
-                "5": "Entertainment",
-                "6": "Sports"
+            "categories" : {
+                    "1": "Science",
+                    "2": "Art",
+                    "3": "Geography",
+                    "4": "History",
+                    "5": "Entertainment",
+                    "6": "Sports"
+                }
             }
 
         self.assertEqual(res.status_code, 200)
