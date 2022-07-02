@@ -40,11 +40,7 @@ def create_app(test_config=None):
 
     @app.route('/categories', methods=['GET'])
     def categories():
-        """
-        @TODO:
-        Create an endpoint to handle GET requests
-        for all available categories.
-        """
+        """Retrieve All available categories"""
 
         all_categories = Category.query.all()
 
@@ -84,8 +80,7 @@ def create_app(test_config=None):
 
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def categories_questions(category_id):
-        """Fetch all the questions belonging to a specific category
-        """
+        """Fetch all the questions belonging to a specific category"""
         questions = Question.query.filter(Question.category == category_id)
         current_page = pagination(request, questions)
 
@@ -169,18 +164,6 @@ def create_app(test_config=None):
             })
         except:
             abort(422)
-
-
-    """
-    @TODO:
-    Create a POST endpoint to get questions based on a search term.
-    It should return any questions for whom the search term
-    is a substring of the question.
-
-    TEST: Search by any phrase. The questions list will update to include
-    only question that include that string within their question.
-    Try using the word "title" to start.
-    """
 
     """
     @TODO:
