@@ -118,6 +118,36 @@ def create_app(test_config=None):
         except:
             abort(422)
 
+    @app.route('/questions', methods=['POST'])
+    def add_question():
+        """Populate the Question table with a new question"""
+
+        body = request.get_json()
+
+        question = body.get('question', None)
+        answer = body.get('answer', None)
+        difficulty = body.get('difficulty', None)
+        category = body.get('category', None)
+
+        if not (question and answer and difficulty and category): abort(400)
+
+        try:
+            q = Question(
+                question=question,
+                answer=answer,
+                difficulty=difficulty,
+                category=category
+            )
+
+            q.insert()
+
+            return jsonify({
+                'success': True,
+                'created': q.id
+            }), 201
+
+        except:
+            abort(422)
     """
     @TODO:
     Create an endpoint to POST a new question,
@@ -138,15 +168,6 @@ def create_app(test_config=None):
     TEST: Search by any phrase. The questions list will update to include
     only question that include that string within their question.
     Try using the word "title" to start.
-    """
-
-    """
-    @TODO:
-    Create a GET endpoint to get questions based on category.
-
-    TEST: In the "List" tab / main screen, clicking on one of the
-    categories in the left column will cause only questions of that
-    category to be shown.
     """
 
     """
