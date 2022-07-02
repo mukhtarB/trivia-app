@@ -96,9 +96,37 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(data['totalQuestions'], 3)
         self.assertIsInstance(data['questions'], list)
+    
+    def test_404_if_category_questions_does_not_exist(self):
+        """Return Error Code 404 if Fetch all Questions
+        based on Category fails
+        """
+        res = self.client().get('/categories/1/questions?page=1000')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'resource not found')
 
     def test_delete_single_question(self):
-        pass
+        """Delete a single question"""
+        question = Question(**self.new_question)
+        question.insert()
+
+        res = self.client().delete(f'/questions/{question.id}')
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_delete_single_question_fails(self):
+        """Delete a single question fails"""
+        res = self.client().delete('/questions/1500')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
 
 
 # Make the tests conveniently executable
