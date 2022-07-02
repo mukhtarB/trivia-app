@@ -125,7 +125,7 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().delete('/questions/1500')
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 422)
+        self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
     
     def test_add_question(self):
