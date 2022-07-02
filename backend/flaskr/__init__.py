@@ -27,6 +27,17 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
         return response
 
+
+    def pagination(request, selection):
+        page = request.args.get('page', 1, type=int)
+        start = (page - 1) * QUESTIONS_PER_PAGE
+        end = start + QUESTIONS_PER_PAGE
+
+        page_data = [data.format() for data in selection]
+        current_page = page_data[start:end]
+        return current_page
+
+
     @app.route('/categories', methods=['GET'])
     def categories():
         """
