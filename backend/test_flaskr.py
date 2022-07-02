@@ -146,6 +146,29 @@ class TriviaTestCase(unittest.TestCase):
         self.assertFalse(data['success'])
         self.assertEqual(data['message'], 'bad request')
 
+    def test_search(self):
+        """Test search endpoint"""
+        res = self.client().post('/questions/search', json=({
+            'searchTerm': 'Shrodingers'
+        }))
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+
+        self.assertTrue(data['totalQuestions'])
+        self.assertIsNone(data['currentCategory'])
+        self.assertIsInstance(data['questions'], list)
+    
+    def test_search_fails_due_to_bad_request_body(self):
+        """Test search endpoint fail due to bad request"""
+        res = self.client().post('/questions/search')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 400)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'bad request')
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
