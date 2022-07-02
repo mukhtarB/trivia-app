@@ -67,9 +67,9 @@ def create_app(test_config=None):
 
         all_questions = Question.query.all()
 
-        if len(all_questions) == 0: abort(404)
-
         current_page = pagination(request, all_questions)
+
+        if len(current_page) == 0: abort(404)
 
         all_categories = Category.query.all()
 
