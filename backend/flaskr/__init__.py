@@ -76,12 +76,29 @@ def create_app(test_config=None):
         return jsonify({
             'success': True,
             'questions': current_page,
-            'total_questions': len(all_questions),
+            'totalQuestions': len(all_questions),
             'categories': {category.id: category.type for category in all_categories},
-            'current_category': None
+            'currentCategory': None
         })
     
 
+    @app.route('/categories/<int:category_id>/questions')
+    def categories_questions(category_id):
+        """Fetch all the questions belonging to a specific category
+        """
+        questions = Question.query.filter(Question.category == category_id)
+        current_page = pagination(request, questions)
+
+        if len(current_page) == 0: abort(404)
+
+        current_Category = Category.query.filter(Category.id == category_id).one_or_none()
+
+        return jsonify({
+            'success': True,
+            'questions': current_page,
+            'totalQuestions': questions.count(),
+            'currentCategory': current_Category.format()['type'],
+        })
     """
     @TODO:
     Create an endpoint to DELETE question using a question ID.
