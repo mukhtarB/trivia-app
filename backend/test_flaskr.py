@@ -30,7 +30,7 @@ class TriviaTestCase(unittest.TestCase):
             'question': 'Is Shrodingers cat dead or alive',
             'answer': "It's in a constant state of dead and alive",
             'difficulty': 5,
-            'category': 1,
+            'category': 5,
         }
 
     def tearDown(self):
@@ -65,9 +65,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertIsNone(data['currentCategory'])
 
-        self.assertEqual(len(data['questions']), 10)
-        self.assertEqual(len(data['categories']), 6)
-        self.assertEqual(data['totalQuestions'], 19)
+        self.assertGreaterEqual(len(data['questions']), 10)
+        self.assertGreaterEqual(len(data['categories']), 6)
+        self.assertGreaterEqual(data['totalQuestions'], 19)
 
         self.assertIsInstance(data['questions'], list)
         self.assertIsInstance(data['categories'], dict)
@@ -127,6 +127,24 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
+    
+    def test_add_question(self):
+        """Test add a new question"""
+        res = self.client().post('/questions', json=(self.new_question))
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 201)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['created'])
+    
+    def test_add_question_fails(self):
+        """Test adding a new question fails"""
+        res = self.client().post('/questions')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 400)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'bad request')
 
 
 # Make the tests conveniently executable
