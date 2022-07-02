@@ -44,23 +44,31 @@ class TriviaTestCase(unittest.TestCase):
     """
 
     def test_get_categories(self):
-        """Test that it returns all categories."""
+        """Gets all categories."""
         res = self.client().get('/categories')
         data = json.loads(res.data)
 
-        res_data = {
-            "categories" : {
-                    "1": "Science",
-                    "2": "Art",
-                    "3": "Geography",
-                    "4": "History",
-                    "5": "Entertainment",
-                    "6": "Sports"
-                }
-            }
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['categories'])
+        self.assertEqual(len(data['categories']), 6)
+
+    def test_questions(self):
+        """GETS all questions and return them with pagination."""
+        res = self.client().get('/questions')
+        data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(data, res_data)
+        self.assertEqual(data['success'], True)
+
+        self.assertTrue(data['questions'])
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(data['categories'])
+        self.assertTrue(data['currentCategory'])
+
+        self.assertEqual(len(data['questions']), 10)
+        self.assertEqual(len(data['categories']), 6)
+        self.assertEqual(data['total_questions'], 19)
+        self.assertEqual(data['questions'][0]['id'], 5)
 
 
 # Make the tests conveniently executable
