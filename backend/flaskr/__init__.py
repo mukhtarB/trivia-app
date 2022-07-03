@@ -188,15 +188,18 @@ def create_app(test_config=None):
 
         try:
             qs = Question.query.filter(Question.id.notin_(previous_questions))
+            question = None
 
             if quiz_category:
-                qs = qs.filter(Question.category == quiz_category)
+                qs = qs.filter(Question.category == quiz_category['id'])
 
-            question = qs.all()[random.randint(0, qs.count())]
+            if qs.count():
+                question = qs[random.randint(0, qs.count() - 1)]
+                question = question.format()
 
             return jsonify({
                 'success': True,
-                'question': question.format()
+                'question': question
             })
         except:
             abort(500)
