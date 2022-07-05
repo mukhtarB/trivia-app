@@ -195,7 +195,7 @@ def create_app(test_config=None):
             qs = Question.query.filter(Question.id.notin_(previous_questions))
             question = None
 
-            if quiz_category:
+            if quiz_category and quiz_category['id']:
                 qs = qs.filter(Question.category == quiz_category['id'])
 
             if qs.count():
