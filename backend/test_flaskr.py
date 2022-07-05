@@ -53,6 +53,15 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertEqual(len(data['categories']), 6)
 
+    def test_get_categories_fails(self):
+        """Tests error handling for gGets all categories."""
+        res = self.client().post('/categories')  # test unallowed method
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 405)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'method not allowed')
+
     def test_paginated_questions(self):
         """GETS all questions and return them with pagination."""
         res = self.client().get('/questions')
