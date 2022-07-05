@@ -74,7 +74,7 @@ def create_app(test_config=None):
             'questions': current_page,
             'totalQuestions': len(all_questions),
             'categories': {category.id: category.type for category in all_categories},
-            'currentCategory': None
+            'currentCategory': [category.type for category in all_categories]
         })
     
 
