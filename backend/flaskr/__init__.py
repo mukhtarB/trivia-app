@@ -179,6 +179,11 @@ def create_app(test_config=None):
 
     @app.route('/quizzes', methods=['POST'])
     def quizzes():
+        """Playing the trivia quiz:
+        Questions are generated randomly and can be based on categories.
+        Question are also checked against a list of previous questions to avoid
+        duplicate questions
+        """
         body = request.get_json()
 
         quiz_category = body.get('quiz_category', None)
