@@ -96,7 +96,7 @@ You will need to provide detailed documentation of your API endpoints including 
 
 -   Fetches a paginated set of questions, a total number of questions, all categories and current category string.
 -   Request Arguments: `page` - integer
--   Returns: An object with 10 paginated questions, total questions, object including all categories, current category string, and a success boolean
+-   Returns: An object with 10 paginated questions, total questions, object including all categories, current category list, and a success boolean
 
 ```json
 {
@@ -118,7 +118,14 @@ You will need to provide detailed documentation of your API endpoints including 
 		"5": "Entertainment",
 		"6": "Sports"
 	},
-	"currentCategory": "History"
+	"currentCategory": [
+		"Science",
+		"Art",
+		"Geography",
+		"History",
+		"Entertainment",
+		"Sports"
+	]
 }
 ```
 
@@ -156,7 +163,7 @@ You will need to provide detailed documentation of your API endpoints including 
 
 ```json
 {
-	"success": True,
+	"success": true,
 	"deleted": 4,
 }
 ```
@@ -181,7 +188,7 @@ You will need to provide detailed documentation of your API endpoints including 
 
 ```json
 {
-	"success": True,
+	"success": true,
 	"created": 4,
 }
 ```
@@ -203,7 +210,7 @@ You will need to provide detailed documentation of your API endpoints including 
 
 ```json
 {
-  "success": True,
+  "success": true,
 	"questions": [
 		{
 			"id": 1,
