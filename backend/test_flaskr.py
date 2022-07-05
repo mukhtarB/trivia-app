@@ -73,13 +73,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['questions'])
         self.assertTrue(data['totalQuestions'])
         self.assertTrue(data['categories'])
-        self.assertIsNone(data['currentCategory'])
+        self.assertTrue(data['currentCategory'])
 
         self.assertGreaterEqual(len(data['questions']), 10)
         self.assertGreaterEqual(len(data['categories']), 6)
         self.assertGreaterEqual(data['totalQuestions'], 19)
 
         self.assertIsInstance(data['questions'], list)
+        self.assertIsInstance(data['currentCategory'], list)
         self.assertIsInstance(data['categories'], dict)
         self.assertEqual(data['questions'][0]['id'], 5)
 
