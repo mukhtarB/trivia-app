@@ -16,11 +16,11 @@ pip install -r requirements.txt
 
 #### Key Pip Dependencies
 
-- [Flask](http://flask.pocoo.org/) is a lightweight backend microservices framework. Flask is required to handle requests and responses.
+-   [Flask](http://flask.pocoo.org/) is a lightweight backend microservices framework. Flask is required to handle requests and responses.
 
-- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use to handle the lightweight SQL database. You'll primarily work in `app.py`and can reference `models.py`.
+-   [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use to handle the lightweight SQL database. You'll primarily work in `app.py`and can reference `models.py`.
 
-- [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross-origin requests from our frontend server.
+-   [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross-origin requests from our frontend server.
 
 ### Set up the Database
 
@@ -71,22 +71,178 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 
 You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
 
-### Documentation Example
+### API Documentation
 
-`GET '/api/v1.0/categories'`
+`GET '/categories'`
 
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
+-   Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+-   Request Arguments: None
+-   Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
 
 ```json
 {
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
+	"1": "Science",
+	"2": "Art",
+	"3": "Geography",
+	"4": "History",
+	"5": "Entertainment",
+	"6": "Sports"
+}
+```
+
+---
+
+`GET '/questions?page=${integer}'`
+
+-   Fetches a paginated set of questions, a total number of questions, all categories and current category string.
+-   Request Arguments: `page` - integer
+-   Returns: An object with 10 paginated questions, total questions, object including all categories, current category string, and a success boolean
+
+```json
+{
+	"questions": [
+		{
+			"id": 1,
+			"question": "This is a question",
+			"answer": "This is an answer",
+			"difficulty": 5,
+			"category": 2
+		}
+	],
+	"totalQuestions": 100,
+	"categories": {
+		"1": "Science",
+		"2": "Art",
+		"3": "Geography",
+		"4": "History",
+		"5": "Entertainment",
+		"6": "Sports"
+	},
+	"currentCategory": "History"
+}
+```
+
+---
+
+`GET '/categories/${id}/questions'`
+
+-   Fetches questions for a cateogry specified by id request argument
+-   Request Arguments: `id` - integer
+-   Returns: An object with questions for the specified category, total questions, current category string, and a success boolean
+
+```json
+{
+	"questions": [
+		{
+			"id": 1,
+			"question": "This is a question",
+			"answer": "This is an answer",
+			"difficulty": 5,
+			"category": 4
+		}
+	],
+	"totalQuestions": 100,
+	"currentCategory": "History"
+}
+```
+
+---
+
+`DELETE '/questions/${id}'`
+
+-   Deletes a specified question using the id of the question
+-   Request Arguments: `id` - integer
+-   Returns: An object with id for the deleted item and a boolean for success
+
+```json
+{
+	"success": True,
+	"deleted": 4,
+}
+```
+
+---
+
+`POST '/questions'`
+
+-   Sends a post request in order to add a new question
+-   Request Body:
+
+```json
+{
+	"question": "Heres a new question string",
+	"answer": "Heres a new answer string",
+	"difficulty": 1,
+	"category": 3
+}
+```
+
+-   Returns: boolean for success and id of created item
+
+```json
+{
+	"success": True,
+	"created": 4,
+}
+```
+
+---
+
+`POST '/questions/search'`
+
+-   Sends a post request in order to search for a specific question by search term
+-   Request Body:
+
+```json
+{
+	"searchTerm": "this is the term the user is looking for"
+}
+```
+
+-   Returns: a success boolean, any array of questions, a number of totalQuestions that met the search term and the current category string
+
+```json
+{
+  "success": True,
+	"questions": [
+		{
+			"id": 1,
+			"question": "This is a question",
+			"answer": "This is an answer",
+			"difficulty": 5,
+			"category": 5
+		}
+	],
+	"totalQuestions": 100,
+	"currentCategory": "Entertainment"
+}
+```
+
+---
+
+`POST '/quizzes'`
+
+-   Sends a post request in order to get the next question
+-   Request Body:
+
+```json
+{
+	"previous_questions": [1, 4, 20, 15],
+	"quiz_category": "current category"
+}
+```
+
+-   Returns: a single new question object, and a success boolean
+
+```json
+{
+	"question": {
+		"id": 1,
+		"question": "This is a question",
+		"answer": "This is an answer",
+		"difficulty": 5,
+		"category": 4
+	}
 }
 ```
 
@@ -101,4 +257,8 @@ dropdb trivia_test
 createdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
+```
+
+```
+
 ```
