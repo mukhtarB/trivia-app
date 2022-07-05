@@ -195,6 +195,20 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['question']['difficulty'])
         self.assertTrue(data['question']['category'])
 
+    def test_play_quiz_fails(self):
+        """Test playing the trivia quiz failure due to bad body
+        by setting 'previous_questions' to None, or removing it.
+        """
+        res = self.client().post('/quizzes', json=({
+            'quiz_category': {'type': 'custom type', 'id': '5'},
+            'previous_questions': None
+        }))
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 400)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'bad request')
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
